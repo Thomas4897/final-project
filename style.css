@@ -1,0 +1,20 @@
+body {
+	/* background-color: black; */
+}
+
+.chessBoard {
+	border: 2px solid black;
+	/* height: 700px; */
+}
+
+.whiteSquare {
+	height: 50px;
+	width: 50px;
+	background: white;
+}
+
+.blackSquare {
+	height: 50px;
+	width: 50px;
+	background: black;
+}
