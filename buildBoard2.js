@@ -140,3 +140,15 @@ function boardSetup() {
 
 boardBuilder();
 boardSetup();
+
+const d5 = $(".test");
+$(".test").click(function () {
+	let testID = $(".test").attr("id");
+
+	if (testID === undefined) {
+		$(this).attr("id", "whitePawn");
+	} else {
+		$(this).removeAttr("id");
+	}
+	console.log(testID);
+});
