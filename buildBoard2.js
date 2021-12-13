@@ -75,80 +75,94 @@ function boardSetup() {
 
 			//! White pieces setup
 			if (horizontalChessBoardArray[i] === "2") {
-				const piece = $(id);
-				piece.text(whitePawn);
+				$(id).addClass("whitePawn");
 			}
 
 			if (id === "#a1 .piece" || id == "#h1 .piece") {
-				const piece = $(id);
-				piece.text(whiteRook);
+				$(id).addClass("whiteRook");
 			}
 
 			if (id === "#b1 .piece" || id == "#g1 .piece") {
-				const piece = $(id);
-				piece.text(whiteKnight);
+				$(id).addClass("whiteKnight");
 			}
 
 			if (id === "#c1 .piece" || id == "#f1 .piece") {
-				const piece = $(id);
-				piece.text(whiteBishop);
+				$(id).addClass("whiteBishop");
 			}
 
 			if (id === "#d1 .piece") {
-				const piece = $(id);
-				piece.text(whiteQueen);
+				$(id).addClass("whiteQueen");
 			}
 
 			if (id === "#e1 .piece") {
-				const piece = $(id);
-				piece.text(whiteKing);
+				$(id).addClass("whiteKing");
 			}
 
 			//! Black pieces setup
 			if (horizontalChessBoardArray[i] === "7") {
-				const piece = $(id);
-				piece.text(blackPawn);
+				$(id).addClass("blackPawn");
 			}
 
 			if (id === "#a8 .piece" || id == "#h8 .piece") {
-				const piece = $(id);
-				piece.text(blackRook);
+				$(id).addClass("blackRook");
 			}
 
 			if (id === "#b8 .piece" || id == "#g8 .piece") {
-				const piece = $(id);
-				piece.text(blackKnight);
+				$(id).addClass("blackKnight");
 			}
 
 			if (id === "#c8 .piece" || id == "#f8 .piece") {
-				const piece = $(id);
-				piece.text(blackBishop);
+				$(id).addClass("blackBishop");
 			}
 
 			if (id === "#d8 .piece") {
-				const piece = $(id);
-				piece.text(blackQueen);
+				$(id).addClass("blackQueen");
 			}
 
 			if (id === "#e8 .piece") {
-				const piece = $(id);
-				piece.text(blackKing);
+				$(id).addClass("blackKing");
 			}
 		}
 	}
 }
 
+// let pieceType = "";
+
+function movePiece() {
+	$(".piece").click(function () {
+		let testClass = $(this).attr("class");
+		let testClassArray = testClass.split(" ");
+
+		let doesContainPiece = testClassArray[1] === undefined;
+		let ifContainsPiece = testClassArray[1] !== undefined;
+
+		if (doesContainPiece && localStorage.pieceType !== undefined) {
+			$(this).addClass(localStorage.pieceType);
+			localStorage.clear();
+		}
+
+		//*=================================
+
+		if (ifContainsPiece) {
+			pieceType = testClassArray[1];
+			$(this).removeClass(pieceType);
+			localStorage.setItem("pieceType", pieceType);
+		}
+		// else if (testClassArray.length < 1) {
+		// 	console.log(testClassArray);
+
+		// 	console.log("if working");
+		// 	$(this).addClass(localStorage["pieceType"]);
+		// }
+	});
+}
+
+// console.log(pieceType);
+
 boardBuilder();
 boardSetup();
-
-const d5 = $(".test");
-$(".test").click(function () {
-	let testID = $(".test").attr("id");
-
-	if (testID === undefined) {
-		$(this).attr("id", "whitePawn");
-	} else {
-		$(this).removeAttr("id");
-	}
-	console.log(testID);
-});
+movePiece();
+//? create-react-app .
+//? npm install
+//? npm run start
+//? yarn start

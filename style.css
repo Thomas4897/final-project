@@ -34,16 +34,63 @@ body {
 	right: 15%;
 	color: black;
 	font-size: 40px;
+	left: 15%;
+	top: 10%;
 }
 
-#whitePawn::after {
-	/* visibility: hidden; */
-	content: "♙";
-}
-
-.test {
+/* .test {
 	background: slategrey;
 	border: 2px solid black;
 	height: 50px;
 	width: 50px;
+} */
+
+/* ! white pieces */
+.whiteKing::after {
+	content: "♔";
+}
+
+.whiteQueen::after {
+	content: "♕";
+}
+
+.whiteRook::after {
+	content: "♖";
+}
+
+.whiteBishop::after {
+	content: "♗";
+}
+
+.whiteKnight::after {
+	content: "♘";
+}
+
+.whitePawn::after {
+	content: "♙";
+}
+
+/* ! Black Pieces */
+.blackKing::after {
+	content: "♚";
+}
+
+.blackQueen::after {
+	content: "♛";
+}
+
+.blackRook::after {
+	content: "♜";
+}
+
+.blackBishop::after {
+	content: "♝";
+}
+
+.blackKnight::after {
+	content: "♞";
+}
+
+.blackPawn::after {
+	content: "♟";
 }
