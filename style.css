@@ -1,13 +1,30 @@
 body {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
-	align-content: center;
+	align-items: center;
+	height: 100vh;
+}
+
+.timer {
+	border: 2px solid black;
+	background: slategrey;
+	font-size: 36px;
+	margin: 5px;
+	padding: 5px;
+}
+
+.timer2 {
+	border: 2px solid black;
+	background: white;
+	font-size: 36px;
+	margin: 5px;
+	padding: 5px;
 }
 
 .chessBoard {
 	height: 480px;
 	width: 480px;
-	margin-top: 50px;
 	display: flex;
 	flex-wrap: wrap;
 	flex-shrink: 0;
@@ -37,13 +54,6 @@ body {
 	left: 15%;
 	top: 10%;
 }
-
-/* .test {
-	background: slategrey;
-	border: 2px solid black;
-	height: 50px;
-	width: 50px;
-} */
 
 /* ! white pieces */
 .whiteKing::after {

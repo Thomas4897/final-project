@@ -75,70 +75,120 @@ function boardSetup() {
 
 			//! White pieces setup
 			if (horizontalChessBoardArray[i] === "2") {
-				const piece = $(id);
-				piece.text(whitePawn);
+				$(id).addClass("whitePawn");
 			}
 
 			if (id === "#a1 .piece" || id == "#h1 .piece") {
-				const piece = $(id);
-				piece.text(whiteRook);
+				$(id).addClass("whiteRook");
 			}
 
 			if (id === "#b1 .piece" || id == "#g1 .piece") {
-				const piece = $(id);
-				piece.text(whiteKnight);
+				$(id).addClass("whiteKnight");
 			}
 
 			if (id === "#c1 .piece" || id == "#f1 .piece") {
-				const piece = $(id);
-				piece.text(whiteBishop);
+				$(id).addClass("whiteBishop");
 			}
 
 			if (id === "#d1 .piece") {
-				const piece = $(id);
-				piece.text(whiteQueen);
+				$(id).addClass("whiteQueen");
 			}
 
 			if (id === "#e1 .piece") {
-				const piece = $(id);
-				piece.text(whiteKing);
+				$(id).addClass("whiteKing");
 			}
 
 			//! Black pieces setup
 			if (horizontalChessBoardArray[i] === "7") {
-				const piece = $(id);
-				piece.text(blackPawn);
+				$(id).addClass("blackPawn");
 			}
 
 			if (id === "#a8 .piece" || id == "#h8 .piece") {
-				const piece = $(id);
-				piece.text(blackRook);
+				$(id).addClass("blackRook");
 			}
 
 			if (id === "#b8 .piece" || id == "#g8 .piece") {
-				const piece = $(id);
-				piece.text(blackKnight);
+				$(id).addClass("blackKnight");
 			}
 
 			if (id === "#c8 .piece" || id == "#f8 .piece") {
-				const piece = $(id);
-				piece.text(blackBishop);
+				$(id).addClass("blackBishop");
 			}
 
 			if (id === "#d8 .piece") {
-				const piece = $(id);
-				piece.text(blackQueen);
+				$(id).addClass("blackQueen");
 			}
 
 			if (id === "#e8 .piece") {
-				const piece = $(id);
-				piece.text(blackKing);
+				$(id).addClass("blackKing");
 			}
 		}
 	}
 }
 
-// piece.text(whiteRook);
+let pieceType = "";
+let capturedPiece = "";
+let lastPosition = "";
+
+function movePiece() {
+	$(".piece").click(function () {
+		console.log("New Move:");
+		let testClass = $(this).attr("class");
+		let testClassArray = testClass.split(" ");
+
+		let doesNotContainPiece = testClassArray[1] === undefined;
+		let ifContainsPiece = testClassArray[1] !== undefined;
+
+		//! If the space that is clicked does not contain a piece then it will set its class to what is in localStorage
+		if (doesNotContainPiece && pieceType !== "") {
+			console.log("line 143 is called");
+			$(this).addClass(pieceType);
+
+			if (lastPosition !== "") {
+				console.log("line 147 is called");
+				$(lastPosition).removeClass(pieceType);
+			}
+			lastPosition = "";
+			pieceType = "";
+
+			console.log("lastPosition", lastPosition);
+			console.log("pieceType", pieceType);
+		}
+
+		//*=================================
+		//! If the space that is clicked does not contain a piece then it will set its class to what is in localStorage
+		if (ifContainsPiece && pieceType !== "") {
+			console.log("line 160 is called");
+			capturedPiece = testClassArray[1];
+			$(this).removeClass(capturedPiece);
+			$(this).addClass(pieceType);
+			$(lastPosition).removeClass(pieceType);
+
+			lastPosition = "";
+			pieceType = "";
+		} else if (ifContainsPiece && pieceType === "") {
+			console.log("line 169 is called");
+			pieceType = testClassArray[1];
+			lastPosition = this;
+			console.log("lastPosition", lastPosition);
+			console.log("pieceType", pieceType);
+		}
+	});
+}
+
+// function capturePiece() {
+// 	$(".piece").click(function () {
+// 		//! TODO
+// 	});
+// }
+
+// console.log(pieceType);
 
 boardBuilder();
 boardSetup();
+movePiece();
+
+//? create-react-app .
+//? npm install
+//? npm run start
+//? yarn start
