@@ -1,19 +1,21 @@
 //!  Features:
 //!     - A function that allows players to Move the pieces
-//!     - A function that keeps track of Player timers (like in a standard chess game players are given a set time and after they use up that time the must make moves with in a shorter timeframe)
+//!     - A function that keeps track of Player timers (like in a standard chess game players are given a set player2Timer and after they use up that time the must make moves with in a shorter timeframe)
 //!     - A function that will capture the opponents piece and remove it from the game
 const body = $("body");
 const chessBoard = $(`<div class="chessBoard">
                         </div>`);
-const time = $(`<div class="timer">
+const player2Timer = $(`<div class="player2Timer">
                         </div>`);
 
-const time2 = $(`<div class="timer2">
+const player1Timer = $(`<div class="player1Timer">
                         </div>`);
 
-body.append(time);
+body.append(player2Timer);
 body.append(chessBoard);
-body.append(time2);
+body.append(player1Timer);
+
+//! =======================================================================================
 
 const verticalChessBoardArray = ["a", "b", "c", "d", "e", "f", "g", "h"];
 const horizontalChessBoardArray = ["8", "7", "6", "5", "5", "3", "2", "1"];
@@ -60,8 +62,9 @@ function boardBuilder() {
 	}
 }
 
-const whiteKing = "♔";
+//! ===============================================================================
 
+const whiteKing = "♔";
 const whiteQueen = "♕";
 const whiteRook = "♖";
 const whiteBishop = "♗";
@@ -135,45 +138,54 @@ function boardSetup() {
 	}
 }
 
+//! ==============================================================================
+
 let pieceType = "";
 let capturedPiece = "";
 let lastPosition = "";
-let startTimer = false;
+let playerNumber = 1;
+
+function playerTimerChange() {
+	if (playerNumber === 1) {
+		playerNumber = 2;
+	} else if (playerNumber === 2) {
+		playerNumber = 1;
+	}
+}
 
 //! ========
 function movePiece() {
 	$(".piece").click(function () {
-		console.log("New Move:");
+		console.log(`New Move Player ${playerNumber}:`);
 
-		startTimer = true;
-		let testClass = $(this).attr("class");
-		let testClassArray = testClass.split(" ");
+		// startTimer1 = true;
+		let pieceClass = $(this).attr("class");
+		let pieceClassArray = pieceClass.split(" ");
 
-		let doesNotContainPiece = testClassArray[1] === undefined;
-		let ifContainsPiece = testClassArray[1] !== undefined;
+		let doesNotContainPiece = pieceClassArray[1] === undefined;
+		let ifContainsPiece = pieceClassArray[1] !== undefined;
 
 		//! If the space that is clicked does not contain a piece then it will set its class to what is in localStorage
 		if (doesNotContainPiece && pieceType !== "") {
-			console.log("line 147 is called");
 			$(this).addClass(pieceType);
-
 			//?
+
+			playerTimerChange();
+
 			if (lastPosition !== "") {
-				console.log("line 153 is called");
 				$(lastPosition).removeClass(pieceType);
 			}
+
 			lastPosition = "";
 			pieceType = "";
-
-			console.log("lastPosition", lastPosition);
-			console.log("pieceType", pieceType);
 		}
 
 		//*=================================
 		//! If the space that is clicked does not contain a piece then it will set its class to what is in localStorage
 		if (ifContainsPiece && pieceType !== "") {
-			console.log("line 165 is called");
-			capturedPiece = testClassArray[1];
+			playerTimerChange();
+
+			capturedPiece = pieceClassArray[1];
 			$(this).removeClass(capturedPiece);
 			$(this).addClass(pieceType);
 			$(lastPosition).removeClass(pieceType);
@@ -181,60 +193,89 @@ function movePiece() {
 			lastPosition = "";
 			pieceType = "";
 		} else if (ifContainsPiece && pieceType === "") {
-			console.log("line 174 is called");
-			pieceType = testClassArray[1];
+			pieceType = pieceClassArray[1];
 			lastPosition = this;
-			console.log("lastPosition", lastPosition);
-			console.log("pieceType", pieceType);
 		}
 	});
 }
 
-function playerTimer() {
-	const countDown = new Time("");
-}
+//! =======================================================================================
+//* refactor to just seconds divide minutes
 
-// const timer = document.querySelector("h1");
 let timeMinutes = 90;
 let timeSeconds = 0;
+
+let timeMinutes2 = 90;
+let timeSeconds2 = 0;
 const interval = 1000;
 
-// time.text(`${timeMinutes}:0${timeSeconds}`);
-// time2.text(`${timeMinutes}:0${timeSeconds}`);
+player2Timer.text(`${timeMinutes2}:0${timeSeconds2}`);
+player1Timer.text(`${timeMinutes}:0${timeSeconds}`);
+
+function setPlayer1Timer() {
+	if (playerNumber === 1) {
+		if (timeSeconds > 0) {
+			timeSeconds--;
+		}
+
+		if (timeSeconds < 10) {
+			seconds = `0${timeSeconds}`;
+		} else {
+			seconds = `${timeSeconds}`;
+		}
+
+		player1Timer.text(`${timeMinutes}:${seconds}`);
+
+		// displayTime(timeSecond);
+		if (timeSeconds <= 0) {
+			if (timeMinutes > 0) {
+				timeMinutes--;
+				timeSeconds = 60;
+			}
+
+			if (timeMinutes <= 1 && timeSeconds <= 1) {
+				clearInterval(countDown);
+				player2Timer.text(`Times Up!`);
+			}
+		}
+	}
+}
+
+function setPlayer2Timer() {
+	if (playerNumber === 2) {
+		if (timeSeconds2 > 0) {
+			timeSeconds2--;
+		}
+
+		if (timeSeconds2 < 10) {
+			seconds2 = `0${timeSeconds2}`;
+		} else {
+			seconds2 = `${timeSeconds2}`;
+		}
+
+		player2Timer.text(`${timeMinutes2}:${seconds2}`);
+
+		// displayTime(timeSecond);
+		if (timeSeconds2 <= 0) {
+			if (timeMinutes2 > 0) {
+				timeMinutes2--;
+				timeSeconds2 = 60;
+			}
+
+			if (timeMinutes2 <= 1 && timeSeconds2 <= 1) {
+				clearInterval(countDown);
+				player2Timer.text(`Times Up!`);
+			}
+		}
+	}
+}
 
 function timer() {
 	const countDown = setInterval(() => {
-		if (startTimer === true) {
-			if (timeSeconds > 0) {
-				timeSeconds--;
-			}
-
-			if (timeSeconds < 10) {
-				seconds = `0${timeSeconds}`;
-			} else {
-				seconds = `${timeSeconds}`;
-			}
-
-			time.text(`${timeMinutes}:${seconds}`);
-
-			// displayTime(timeSecond);
-			if (timeSeconds <= 0) {
-				if (timeMinutes > 0) {
-					timeMinutes--;
-					timeSeconds = 60;
-				}
-
-				if (timeMinutes <= 1 && timeSeconds <= 1) {
-					clearInterval(countDown);
-					time.text(`Times Up!`);
-				}
-			}
-		}
+		setPlayer1Timer();
+		setPlayer2Timer();
 	}, interval);
 }
-
-time.text(`${timeMinutes}:0${timeSeconds}`);
-time2.text(`${timeMinutes}:0${timeSeconds}`);
 
 boardBuilder();
 boardSetup();
