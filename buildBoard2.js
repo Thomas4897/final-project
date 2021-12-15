@@ -11,6 +11,10 @@ const player2Timer = $(`<div class="player2Timer">
 const player1Timer = $(`<div class="player1Timer">
                         </div>`);
 
+const interval = 1000;
+
+let clickable = true;
+
 body.append(player2Timer);
 body.append(chessBoard);
 body.append(player1Timer);
@@ -168,35 +172,36 @@ function movePiece() {
 
 		let notContainsPiece = pieceClassArray[1] === undefined;
 		let containsPiece = pieceClassArray[1] !== undefined;
+		if ((clickable = true)) {
+			//! If the space that is clicked does not contain a piece then it will set its class to what is in localStorage
+			if (notContainsPiece && pieceType !== "") {
+				//?
+				$(this).addClass(pieceType);
 
-		//! If the space that is clicked does not contain a piece then it will set its class to what is in localStorage
-		if (notContainsPiece && pieceType !== "") {
-			//?
-			$(this).addClass(pieceType);
+				if (lastPosition !== "") {
+					$(lastPosition).removeClass(pieceType);
+				}
 
-			if (lastPosition !== "") {
-				$(lastPosition).removeClass(pieceType);
+				playerTimerChange();
+				resetPieceAndPosition();
 			}
 
-			playerTimerChange();
-			resetPieceAndPosition();
-		}
+			//*=================================
+			//! If the space that is clicked does not contain a piece then it will set its class to what is in localStorage
+			if (containsPiece && pieceType !== "") {
+				//?
+				capturedPiece = pieceClassArray[1];
 
-		//*=================================
-		//! If the space that is clicked does not contain a piece then it will set its class to what is in localStorage
-		if (containsPiece && pieceType !== "") {
-			//?
-			capturedPiece = pieceClassArray[1];
+				$(this).removeClass(capturedPiece);
+				$(this).addClass(pieceType);
+				$(lastPosition).removeClass(pieceType);
 
-			$(this).removeClass(capturedPiece);
-			$(this).addClass(pieceType);
-			$(lastPosition).removeClass(pieceType);
-
-			playerTimerChange();
-			resetPieceAndPosition();
-		} else if (containsPiece && pieceType === "") {
-			pieceType = pieceClassArray[1];
-			lastPosition = this;
+				playerTimerChange();
+				resetPieceAndPosition();
+			} else if (containsPiece && pieceType === "") {
+				pieceType = pieceClassArray[1];
+				lastPosition = this;
+			}
 		}
 	});
 }
@@ -206,56 +211,40 @@ function movePiece() {
 
 //? Player 1 Timer
 let timers = [5400, 5400];
+let playerMinutes = Math.floor(timers[0] / 60);
+let playerSeconds = timers[0] % 60;
 
-let player1time = 5400;
-let player1Minutes = Math.floor(player1time / 60);
-let player1Seconds = player1time % 60;
+player1Timer.text(`${playerMinutes}:0${playerSeconds}`);
+player2Timer.text(`${playerMinutes}:0${playerSeconds}`);
 
-const interval = 1000;
+function setPlayersTimer(playerNumber) {
+	let playerMinutes = Math.floor(timers[playerNumber - 1] / 60);
+	let playerSeconds = timers[playerNumber - 1] % 60;
 
-player1Timer.text(`${player1Minutes}:0${player1Seconds}`);
-
-function setPlayer1Timer() {
 	if (playerNumber === 1) {
-		player1time--;
+		timers[playerNumber - 1]--;
 
-		player1Minutes = Math.floor(player1time / 60);
-		player1Seconds = player1time % 60;
-
-		if (player1Seconds < 10) {
-			player1Timer.text(`${player1Minutes}:0${player1Seconds}`);
+		if (playerSeconds < 10) {
+			player1Timer.text(`${playerMinutes}:0${playerSeconds}`);
 		} else {
-			player1Timer.text(`${player1Minutes}:${player1Seconds}`);
+			player1Timer.text(`${playerMinutes}:${playerSeconds}`);
 		}
 	}
-}
 
-//? Player 2 Timer
-let player2time = 5400;
-let player2Minutes = Math.floor(player2time / 60);
-let player2Seconds = player2time % 60;
-
-player2Timer.text(`${player2Minutes}:0${player2Seconds}`);
-
-function setPlayer2Timer() {
 	if (playerNumber === 2) {
-		player2time--;
+		timers[playerNumber - 1]--;
 
-		player2Minutes = Math.floor(player2time / 60);
-		player2Seconds = player2time % 60;
-
-		if (player2Seconds < 10) {
-			player2Timer.text(`${player2Minutes}:0${player2Seconds}`);
+		if (playerSeconds < 10) {
+			player2Timer.text(`${playerMinutes}:0${playerSeconds}`);
 		} else {
-			player2Timer.text(`${player2Minutes}:${player2Seconds}`);
+			player2Timer.text(`${playerMinutes}:${playerSeconds}`);
 		}
 	}
 }
 
 function timer() {
 	const countDown = setInterval(() => {
-		setPlayer1Timer();
-		setPlayer2Timer();
+		setPlayersTimer(playerNumber);
 	}, interval);
 }
 
@@ -263,8 +252,3 @@ boardBuilder();
 boardSetup();
 movePiece();
 timer();
-
-//? create-react-app .
-//? npm install
-//? npm run start
-//? yarn start
