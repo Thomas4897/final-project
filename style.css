@@ -4,6 +4,7 @@ body {
 	justify-content: center;
 	align-items: center;
 	height: 100vh;
+	background-color: rgb(189, 189, 189);
 }
 
 .player2Timer {

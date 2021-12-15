@@ -153,46 +153,48 @@ function playerTimerChange() {
 	}
 }
 
+function resetPieceAndPosition() {
+	pieceType = "";
+	lastPosition = "";
+}
+
 //! ========
 function movePiece() {
 	$(".piece").click(function () {
 		console.log(`New Move Player ${playerNumber}:`);
 
-		// startTimer1 = true;
 		let pieceClass = $(this).attr("class");
 		let pieceClassArray = pieceClass.split(" ");
 
-		let doesNotContainPiece = pieceClassArray[1] === undefined;
-		let ifContainsPiece = pieceClassArray[1] !== undefined;
+		let notContainsPiece = pieceClassArray[1] === undefined;
+		let containsPiece = pieceClassArray[1] !== undefined;
 
 		//! If the space that is clicked does not contain a piece then it will set its class to what is in localStorage
-		if (doesNotContainPiece && pieceType !== "") {
-			$(this).addClass(pieceType);
+		if (notContainsPiece && pieceType !== "") {
 			//?
-
-			playerTimerChange();
+			$(this).addClass(pieceType);
 
 			if (lastPosition !== "") {
 				$(lastPosition).removeClass(pieceType);
 			}
 
-			lastPosition = "";
-			pieceType = "";
+			playerTimerChange();
+			resetPieceAndPosition();
 		}
 
 		//*=================================
 		//! If the space that is clicked does not contain a piece then it will set its class to what is in localStorage
-		if (ifContainsPiece && pieceType !== "") {
-			playerTimerChange();
-
+		if (containsPiece && pieceType !== "") {
+			//?
 			capturedPiece = pieceClassArray[1];
+
 			$(this).removeClass(capturedPiece);
 			$(this).addClass(pieceType);
 			$(lastPosition).removeClass(pieceType);
 
-			lastPosition = "";
-			pieceType = "";
-		} else if (ifContainsPiece && pieceType === "") {
+			playerTimerChange();
+			resetPieceAndPosition();
+		} else if (containsPiece && pieceType === "") {
 			pieceType = pieceClassArray[1];
 			lastPosition = this;
 		}
@@ -202,70 +204,50 @@ function movePiece() {
 //! =======================================================================================
 //* refactor to just seconds divide minutes
 
-let timeMinutes = 90;
-let timeSeconds = 0;
+//? Player 1 Timer
+let timers = [5400, 5400];
 
-let timeMinutes2 = 90;
-let timeSeconds2 = 0;
+let player1time = 5400;
+let player1Minutes = Math.floor(player1time / 60);
+let player1Seconds = player1time % 60;
+
 const interval = 1000;
 
-player2Timer.text(`${timeMinutes2}:0${timeSeconds2}`);
-player1Timer.text(`${timeMinutes}:0${timeSeconds}`);
+player1Timer.text(`${player1Minutes}:0${player1Seconds}`);
 
 function setPlayer1Timer() {
 	if (playerNumber === 1) {
-		if (timeSeconds > 0) {
-			timeSeconds--;
-		}
+		player1time--;
 
-		if (timeSeconds < 10) {
-			seconds = `0${timeSeconds}`;
+		player1Minutes = Math.floor(player1time / 60);
+		player1Seconds = player1time % 60;
+
+		if (player1Seconds < 10) {
+			player1Timer.text(`${player1Minutes}:0${player1Seconds}`);
 		} else {
-			seconds = `${timeSeconds}`;
-		}
-
-		player1Timer.text(`${timeMinutes}:${seconds}`);
-
-		// displayTime(timeSecond);
-		if (timeSeconds <= 0) {
-			if (timeMinutes > 0) {
-				timeMinutes--;
-				timeSeconds = 60;
-			}
-
-			if (timeMinutes <= 1 && timeSeconds <= 1) {
-				clearInterval(countDown);
-				player2Timer.text(`Times Up!`);
-			}
+			player1Timer.text(`${player1Minutes}:${player1Seconds}`);
 		}
 	}
 }
 
+//? Player 2 Timer
+let player2time = 5400;
+let player2Minutes = Math.floor(player2time / 60);
+let player2Seconds = player2time % 60;
+
+player2Timer.text(`${player2Minutes}:0${player2Seconds}`);
+
 function setPlayer2Timer() {
 	if (playerNumber === 2) {
-		if (timeSeconds2 > 0) {
-			timeSeconds2--;
-		}
+		player2time--;
 
-		if (timeSeconds2 < 10) {
-			seconds2 = `0${timeSeconds2}`;
+		player2Minutes = Math.floor(player2time / 60);
+		player2Seconds = player2time % 60;
+
+		if (player2Seconds < 10) {
+			player2Timer.text(`${player2Minutes}:0${player2Seconds}`);
 		} else {
-			seconds2 = `${timeSeconds2}`;
-		}
-
-		player2Timer.text(`${timeMinutes2}:${seconds2}`);
-
-		// displayTime(timeSecond);
-		if (timeSeconds2 <= 0) {
-			if (timeMinutes2 > 0) {
-				timeMinutes2--;
-				timeSeconds2 = 60;
-			}
-
-			if (timeMinutes2 <= 1 && timeSeconds2 <= 1) {
-				clearInterval(countDown);
-				player2Timer.text(`Times Up!`);
-			}
+			player2Timer.text(`${player2Minutes}:${player2Seconds}`);
 		}
 	}
 }
