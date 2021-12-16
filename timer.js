@@ -8,13 +8,21 @@ const interval = 1000;
 
 //? Player 1 Timer
 let timers = [5400, 5400];
-let playertimers = [player1Timer, player2Timer];
-let playerMinutes = Math.floor(timers[0] / 60);
-let playerSeconds = timers[0] % 60;
 let playerNumber = 1;
+let playertimers = [player1Timer, player2Timer];
 
-player1Timer.text(`${playerMinutes}:0${playerSeconds}`);
-player2Timer.text(`${playerMinutes}:0${playerSeconds}`);
+function setTimers(playerNumber) {
+	let playerMinutes = Math.floor(timers[playerNumber - 1] / 60);
+	let playerSeconds = timers[playerNumber - 1] % 60;
+	let pad = playerSeconds < 10 ? "0" : "";
+
+	playertimers[playerNumber - 1].text(
+		`${playerMinutes}:${pad}${playerSeconds}`
+	);
+}
+
+setTimers(1);
+setTimers(2);
 
 function playerTimerChange() {
 	if (playerNumber === 1) {
@@ -25,15 +33,13 @@ function playerTimerChange() {
 }
 
 function setPlayersTimer(playerNumber) {
-	let playerMinutes = Math.floor(timers[playerNumber - 1] / 60);
-	let playerSeconds = timers[playerNumber - 1] % 60;
-	let pad = playerSeconds < 10 ? "0" : "";
+	setTimers(playerNumber);
 
-	timers[playerNumber - 1]--;
-
-	playertimers[playerNumber - 1].text(
-		`${playerMinutes}:${pad}${playerSeconds}`
-	);
+	if (timers[playerNumber - 1] >= 0) {
+		timers[playerNumber - 1]--;
+	} else {
+		playertimers[playerNumber - 1].text(`Times Up!`);
+	}
 }
 
 function timer() {

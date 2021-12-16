@@ -1,5 +1,4 @@
 let pieceType = "";
-let capturedPiece = "";
 let lastPosition = "";
 
 function resetPieceAndPosition() {
@@ -16,17 +15,23 @@ function movePiece() {
 		// });
 		let pieceClass = $(this).attr("class");
 		let pieceClassArray = pieceClass.split(" ");
-
-		let notContainsPiece = pieceClassArray[1] === undefined;
-		let containsPiece = pieceClassArray[1] !== undefined;
+		let doesSquareContainsPiece = pieceClassArray[1] !== undefined;
+		let isWhitesTurn = playerNumber === 1;
+		let isWhitesPiece = pieceType[0] === "w";
+		let isBlacksTurn = playerNumber === 2;
+		let isBlacksPiece = pieceType[0] === "b";
+		let isStart = pieceType === "";
+		let capturedPiece = "";
+		// let isSamePieceColor =
+		// 	capturedPiece[0] !== $(lastPosition).attr("class")[6];
 
 		if (
-			(playerNumber === 1 && pieceType[0] === "w") ||
-			(playerNumber === 2 && pieceType[0] === "b") ||
-			pieceType === ""
+			(isWhitesTurn && isWhitesPiece) ||
+			(isBlacksTurn && isBlacksPiece) ||
+			isStart
 		) {
 			//! If the space that is clicked does not contain a piece then it will set its class to what is in localStorage
-			if (notContainsPiece && pieceType !== "") {
+			if (!doesSquareContainsPiece && !isStart) {
 				//?
 				$(this).addClass(pieceType);
 
@@ -40,7 +45,10 @@ function movePiece() {
 
 			//*=================================
 			//! If the space that is clicked does not contain a piece then it will set its class to what is in localStorage
-			if (containsPiece && pieceType !== "") {
+			if (doesSquareContainsPiece && isStart) {
+				pieceType = pieceClassArray[1];
+				lastPosition = this;
+			} else if (doesSquareContainsPiece && !isStart) {
 				//?
 				capturedPiece = pieceClassArray[1];
 
@@ -52,9 +60,6 @@ function movePiece() {
 					playerTimerChange();
 					resetPieceAndPosition();
 				}
-			} else if (containsPiece && pieceType === "") {
-				pieceType = pieceClassArray[1];
-				lastPosition = this;
 			}
 		} else {
 			pieceType = "";
