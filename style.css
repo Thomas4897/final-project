@@ -47,13 +47,13 @@ body {
 }
 
 .piece {
+	padding: 10% 15%;
 	position: absolute;
-	bottom: 10%;
-	right: 15%;
-	color: black;
+	bottom: 0%;
+	right: 0%;
+	left: 0%;
+	top: 0%;
 	font-size: 40px;
-	left: 15%;
-	top: 10%;
 }
 
 /* ! white pieces */
