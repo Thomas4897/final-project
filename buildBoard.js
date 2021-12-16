@@ -1,27 +1,29 @@
 //!  Features:
 //!     - A function that allows players to Move the pieces
-//!     - A function that keeps track of Player timers (like in a standard chess game players are given a set time and after they use up that time the must make moves with in a shorter timeframe)
+//!     - A function that keeps track of Player timers (like in a standard chess game players are given a set player2Timer and after they use up that time the must make moves with in a shorter timeframe)
 //!     - A function that will capture the opponents piece and remove it from the game
 const body = $("body");
 const chessBoard = $(`<div class="chessBoard">
                         </div>`);
 
+body.append(player2Timer);
 body.append(chessBoard);
+body.append(player1Timer);
+
+//! =======================================================================================
 
 const verticalChessBoardArray = ["a", "b", "c", "d", "e", "f", "g", "h"];
 const horizontalChessBoardArray = ["8", "7", "6", "5", "5", "3", "2", "1"];
 
-// let rowArray = [];
-// let chessboardArray = [];
-
+//! ===========
 function boardBuilder() {
+	//? ===========
 	for (let i = 0; i < horizontalChessBoardArray.length; i++) {
 		let whiteBackground = false;
 
 		for (let j = 0; j < verticalChessBoardArray.length; j++) {
 			//? defines the id as the div's xy position on the board
 			const position = `${verticalChessBoardArray[j]}${horizontalChessBoardArray[i]}`;
-			// rowArray.push(position);
 
 			//? defines the id as the div's xy position on the board
 			const whiteSquare = $(
@@ -38,21 +40,24 @@ function boardBuilder() {
             </div>`
 			);
 
+			//? ========
 			if ((i % 2 === 0 && j % 2 === 0) || (i % 2 === 1 && j % 2 === 1)) {
 				whiteBackground = true;
 			} else {
 				whiteBackground = false;
 			}
 
+			//? ===========
 			if (whiteBackground === true) {
 				chessBoard.append(whiteSquare);
 			} else {
 				chessBoard.append(blackSquare);
 			}
 		}
-		// chessboardArray.push(rowArray);
 	}
 }
+
+//! ===============================================================================
 
 const whiteKing = "♔";
 const whiteQueen = "♕";
@@ -68,7 +73,9 @@ const blackBishop = "♝";
 const blackKnight = "♞";
 const blackPawn = "♟";
 
+//! =========
 function boardSetup() {
+	//? ============
 	for (let i = 0; i < horizontalChessBoardArray.length; i++) {
 		for (let j = 0; j < verticalChessBoardArray.length; j++) {
 			const id = `#${verticalChessBoardArray[j]}${horizontalChessBoardArray[i]} .piece`;
@@ -126,69 +133,7 @@ function boardSetup() {
 	}
 }
 
-let pieceType = "";
-let capturedPiece = "";
-let lastPosition = "";
-
-function movePiece() {
-	$(".piece").click(function () {
-		console.log("New Move:");
-		let testClass = $(this).attr("class");
-		let testClassArray = testClass.split(" ");
-
-		let doesNotContainPiece = testClassArray[1] === undefined;
-		let ifContainsPiece = testClassArray[1] !== undefined;
-
-		//! If the space that is clicked does not contain a piece then it will set its class to what is in localStorage
-		if (doesNotContainPiece && pieceType !== "") {
-			console.log("line 143 is called");
-			$(this).addClass(pieceType);
-
-			if (lastPosition !== "") {
-				console.log("line 147 is called");
-				$(lastPosition).removeClass(pieceType);
-			}
-			lastPosition = "";
-			pieceType = "";
-
-			console.log("lastPosition", lastPosition);
-			console.log("pieceType", pieceType);
-		}
-
-		//*=================================
-		//! If the space that is clicked does not contain a piece then it will set its class to what is in localStorage
-		if (ifContainsPiece && pieceType !== "") {
-			console.log("line 160 is called");
-			capturedPiece = testClassArray[1];
-			$(this).removeClass(capturedPiece);
-			$(this).addClass(pieceType);
-			$(lastPosition).removeClass(pieceType);
-
-			lastPosition = "";
-			pieceType = "";
-		} else if (ifContainsPiece && pieceType === "") {
-			console.log("line 169 is called");
-			pieceType = testClassArray[1];
-			lastPosition = this;
-			console.log("lastPosition", lastPosition);
-			console.log("pieceType", pieceType);
-		}
-	});
-}
-
-// function capturePiece() {
-// 	$(".piece").click(function () {
-// 		//! TODO
-// 	});
-// }
-
-// console.log(pieceType);
-
 boardBuilder();
 boardSetup();
 movePiece();
-
-//? create-react-app .
-//? npm install
-//? npm run start
-//? yarn start
+timer();
