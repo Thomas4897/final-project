@@ -1,55 +1,101 @@
-let selectedPieceClass = "";
-let selectedPiece = "";
+let selectedPieceType = "";
+let lastPosition = "";
+let pieceClass = "";
+let lastPositionPieceType = "";
+let pieceClassArray = "";
+
+let doesSquareContainsPiece = "";
+let isWhitesTurn = "";
+let isWhitesPiece = "";
+let isBlacksTurn = "";
+let isBlacksPiece = "";
+let isPieceTypeEmpty = "";
+let capturedPieceType = "";
+
+let isCapturingPiece = "";
+let isValidCapture = "";
 
 function resetPieceAndPosition() {
-	selectedPieceClass = "";
-	selectedPiece = "";
+	selectedPieceType = "";
+	lastPosition = "";
+	capturedPiece = "";
 }
 
 //! ========
 function movePiece() {
 	$(".piece").click(function () {
 		console.log(`New Move Player ${playerNumber}:`);
+		// $(this).css({
+		// 	background: "rgba(112, 128, 144, 0.63)",
+		// });
+		pieceClass = $(this).attr("class");
+		if (lastPosition !== "") {
+			lastPositionPieceType = $(lastPosition).attr("class")[6];
+		}
+		pieceClassArray = pieceClass.split(" ");
 
-		let pieceClass = $(this).attr("class");
-		let pieceClassArray = pieceClass.split(" ");
-		let doesSquareContainsPiece = pieceClassArray[1] !== undefined;
+		doesSquareContainsPiece = pieceClassArray[1] !== undefined;
 
-		let isWhitesTurn = playerNumber === 1;
-		let isWhitesPiece = selectedPieceClass[0] === "w";
-		let isBlacksTurn = playerNumber === 2;
-		let isBlacksPiece = selectedPieceClass[0] === "b";
-		let isStart = selectedPieceClass === "";
+		isWhitesTurn = playerNumber === 1;
+		isWhitesPiece = selectedPieceType[0] === "w";
+		isBlacksTurn = playerNumber === 2;
+		isBlacksPiece = selectedPieceType[0] === "b";
 
-		let capturedPiece = "";
+		isPieceTypeEmpty = selectedPieceType === "";
+
+		isPlayerMoving = doesSquareContainsPiece && isPieceTypeEmpty;
+		isCapturingPiece = doesSquareContainsPiece && !isPieceTypeEmpty;
+		notCapturingPiece = !doesSquareContainsPiece && !isPieceTypeEmpty;
+
+		// let isSamePieceColor =
+		// 	capturedPieceType[0] !== $(lastPosition).attr("class")[6];
 
 		if (
 			(isWhitesTurn && isWhitesPiece) ||
 			(isBlacksTurn && isBlacksPiece) ||
-			isStart
+			isPieceTypeEmpty
 		) {
-			//*=================================
-			//! If the space that is clicked does not contain a piece then it will set its class to what is in localStorage
-			// if (doesSquareContainsPiece && isStart) {
-			selectedPieceClass = pieceClassArray[1];
+			if (isPlayerMoving) {
+				console.log("Called");
+				selectedPieceType = pieceClassArray[1];
+				lastPosition = this;
+			}
 
-			selectedPiece = this;
+			if (notCapturingPiece) {
+				console.log("Called2");
 
-			let selectedPieceColor = $(selectedPiece).attr("class")[6];
+				//?
+				$(this).addClass(selectedPieceType);
 
-			// $(selectedPiece).removeClass(selectedPieceClass);
-			// }
+				if (lastPosition !== "") {
+					$(lastPosition).removeClass(selectedPieceType);
+				}
 
-			//?
+				playerTimerChange();
+				resetPieceAndPosition();
+			}
 
-			$(this).addClass(selectedPieceClass);
+			if (isCapturingPiece) {
+				console.log("Called3");
+				//?
+				capturedPiece = pieceClassArray[1];
+				capturedPieceType = capturedPiece[0];
 
-			// $(selectedPiece).removeClass(selectedPieceClass);
+				isValidCapture = capturedPieceType !== lastPositionPieceType;
 
-			playerTimerChange();
-			// resetPieceAndPosition();
+				if (isValidCapture) {
+					console.log("Called4");
+
+					$(this).removeClass(capturedPiece);
+					$(this).addClass(selectedPieceType);
+					$(lastPosition).removeClass(selectedPieceType);
+
+					playerTimerChange();
+					resetPieceAndPosition();
+				}
+			}
 		} else {
-			selectedPieceClass = "";
+			selectedPieceType = "";
 		}
 	});
 }
