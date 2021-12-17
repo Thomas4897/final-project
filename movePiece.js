@@ -1,68 +1,72 @@
-let pieceType = "";
-let lastPosition = "";
+let selectedPieceType = "";
+let selectedPiece = "";
+let capturedPieceType = "";
 
 function resetPieceAndPosition() {
-	pieceType = "";
-	lastPosition = "";
+	selectedPieceType = "";
+	selectedPiece = "";
+	capturedPiece = "";
 }
 
 //! ========
 function movePiece() {
 	$(".piece").click(function () {
 		console.log(`New Move Player ${playerNumber}:`);
-		// $(this).css({
-		// 	background: "rgba(112, 128, 144, 0.63)",
-		// });
+
 		let pieceClass = $(this).attr("class");
 		let pieceClassArray = pieceClass.split(" ");
 		let doesSquareContainsPiece = pieceClassArray[1] !== undefined;
+
 		let isWhitesTurn = playerNumber === 1;
-		let isWhitesPiece = pieceType[0] === "w";
+		let isWhitesPiece = selectedPieceType[0] === "w";
 		let isBlacksTurn = playerNumber === 2;
-		let isBlacksPiece = pieceType[0] === "b";
-		let isStart = pieceType === "";
-		let capturedPiece = "";
-		// let isSamePieceColor =
-		// 	capturedPiece[0] !== $(lastPosition).attr("class")[6];
+		let isBlacksPiece = selectedPieceType[0] === "b";
+
+		let isPieceTypeEmpty = selectedPieceType === "";
+
+		let isPlayerSelectingPiece = doesSquareContainsPiece && isPieceTypeEmpty;
+		let isPlayerCapturingPiece = doesSquareContainsPiece && !isPieceTypeEmpty;
+		let isPlayerMovingToEmptySquare =
+			!doesSquareContainsPiece && !isPieceTypeEmpty;
 
 		if (
 			(isWhitesTurn && isWhitesPiece) ||
 			(isBlacksTurn && isBlacksPiece) ||
-			isStart
+			isPieceTypeEmpty
 		) {
-			//! If the space that is clicked does not contain a piece then it will set its class to what is in localStorage
-			if (!doesSquareContainsPiece && !isStart) {
-				//?
-				$(this).addClass(pieceType);
+			if (isPlayerSelectingPiece) {
+				selectedPieceType = pieceClassArray[1];
+				selectedPiece = this;
+			}
 
-				if (lastPosition !== "") {
-					$(lastPosition).removeClass(pieceType);
-				}
+			if (isPlayerMovingToEmptySquare) {
+				//?
+				$(this).addClass(selectedPieceType);
+				$(selectedPiece).removeClass(selectedPieceType);
 
 				playerTimerChange();
 				resetPieceAndPosition();
 			}
 
-			//*=================================
-			//! If the space that is clicked does not contain a piece then it will set its class to what is in localStorage
-			if (doesSquareContainsPiece && isStart) {
-				pieceType = pieceClassArray[1];
-				lastPosition = this;
-			} else if (doesSquareContainsPiece && !isStart) {
+			if (isPlayerCapturingPiece) {
 				//?
 				capturedPiece = pieceClassArray[1];
+				capturedPieceType = capturedPiece[0];
+				let lastPositionPieceType = $(selectedPiece).attr("class")[6];
 
-				if (capturedPiece[0] !== $(lastPosition).attr("class")[6]) {
+				isValidCapture = capturedPieceType !== lastPositionPieceType;
+
+				if (isValidCapture) {
 					$(this).removeClass(capturedPiece);
-					$(this).addClass(pieceType);
-					$(lastPosition).removeClass(pieceType);
+					$(this).addClass(selectedPieceType);
+					$(selectedPiece).removeClass(selectedPieceType);
 
 					playerTimerChange();
 					resetPieceAndPosition();
 				}
 			}
 		} else {
-			pieceType = "";
+			selectedPieceType = "";
 		}
 	});
 }

@@ -40,8 +40,11 @@ function boardBuilder() {
             </div>`
 			);
 
+			let isWhiteSquare =
+				(i % 2 === 0 && j % 2 === 0) || (i % 2 === 1 && j % 2 === 1);
+
 			//? ========
-			if ((i % 2 === 0 && j % 2 === 0) || (i % 2 === 1 && j % 2 === 1)) {
+			if (isWhiteSquare) {
 				whiteBackground = true;
 			} else {
 				whiteBackground = false;
