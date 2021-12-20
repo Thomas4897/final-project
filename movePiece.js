@@ -8,7 +8,7 @@ function resetPieceAndPosition() {
 	capturedPiece = "";
 }
 
-//! ========
+//! Function that selects player's piece and moves it
 function movePiece() {
 	$(".piece").click(function () {
 		console.log(`New Move Player ${playerNumber}:`);
@@ -29,6 +29,7 @@ function movePiece() {
 		let isPlayerMovingToEmptySquare =
 			!doesSquareContainsPiece && !isPieceTypeEmpty;
 
+		//? If is a players turn & the players piece is clicked then piece is selected or moved
 		if (
 			(isWhitesTurn && isWhitesPiece) ||
 			(isBlacksTurn && isBlacksPiece) ||

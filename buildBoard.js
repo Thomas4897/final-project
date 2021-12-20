@@ -15,17 +15,18 @@ body.append(player1Timer);
 const verticalChessBoardArray = ["a", "b", "c", "d", "e", "f", "g", "h"];
 const horizontalChessBoardArray = ["8", "7", "6", "5", "5", "3", "2", "1"];
 
-//! ===========
+//! Function that builds an 8x8 checkered board
 function boardBuilder() {
-	//? ===========
+	//? For loop that cycles through horizontalChessBoardArray
 	for (let i = 0; i < horizontalChessBoardArray.length; i++) {
 		let whiteBackground = false;
 
+		//? For loop that cycles through verticalChessBoardArray
 		for (let j = 0; j < verticalChessBoardArray.length; j++) {
-			//? defines the id as the div's xy position on the board
+			//? Creates a xy id from the two arrays
 			const position = `${verticalChessBoardArray[j]}${horizontalChessBoardArray[i]}`;
 
-			//? defines the id as the div's xy position on the board
+			//? defines the whiteSquare id as the div's xy position on the board
 			const whiteSquare = $(
 				`<div class="whiteSquare" id="${position}">
 				${position}
@@ -33,6 +34,7 @@ function boardBuilder() {
 			</div>`
 			);
 
+			//? defines the blackSquare id as the div's xy position on the board
 			const blackSquare = $(
 				`<div class="blackSquare" id="${position}">
 				${position} 
@@ -40,17 +42,18 @@ function boardBuilder() {
             </div>`
 			);
 
-			let isWhiteSquare =
+			//? Defines a whiteSquare
+			const isWhiteSquare =
 				(i % 2 === 0 && j % 2 === 0) || (i % 2 === 1 && j % 2 === 1);
 
-			//? ========
+			//? If whiteSquare sets whiteBackground to true else false
 			if (isWhiteSquare) {
 				whiteBackground = true;
 			} else {
 				whiteBackground = false;
 			}
 
-			//? ===========
+			//? If whiteBackground is true then appends a whiteSquare else appends a blackSquare
 			if (whiteBackground === true) {
 				chessBoard.append(whiteSquare);
 			} else {
@@ -76,11 +79,13 @@ const blackBishop = "♝";
 const blackKnight = "♞";
 const blackPawn = "♟";
 
-//! =========
+//! Functions that sets up the initial chessboard
 function boardSetup() {
-	//? ============
+	//? For loop that cycles through horizontalChessBoardArray
 	for (let i = 0; i < horizontalChessBoardArray.length; i++) {
+		//? For loop that cycles through verticalChessBoardArray
 		for (let j = 0; j < verticalChessBoardArray.length; j++) {
+			//? Creates a xy id from the two arrays
 			const id = `#${verticalChessBoardArray[j]}${horizontalChessBoardArray[i]} .piece`;
 
 			//! White pieces setup
