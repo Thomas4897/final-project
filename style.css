@@ -105,3 +105,56 @@ body {
 .blackPawn::after {
 	content: "♟";
 }
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (max-width: 601px) {
+	.chessBoard {
+		height: 240px;
+		width: 240px;
+		font-size: 10px;
+	}
+
+	.whiteSquare {
+		height: 30px;
+		width: 30px;
+	}
+
+	.blackSquare {
+		height: 30px;
+		width: 30px;
+	}
+
+	.piece {
+		font-size: 20px;
+	}
+
+	body {
+		font-size: 20px;
+	}
+
+	.player1Timer {
+		font-size: 18px;
+	}
+
+	.player2Timer {
+		font-size: 18px;
+	}
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+/* @media only screen and (max-width: 768px) {
+	.chessBoard {
+		height: 480px;
+		width: 480px;
+	}
+
+	.whiteSquare {
+		height: 60px;
+		width: 60px;
+	}
+
+	.blackSquare {
+		height: 60px;
+		width: 60px;
+	}
+} */
